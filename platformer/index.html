@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Platformer</title>
+    <style>
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
+
+      .game-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+      }
+
+      #game {
+          width: 800px;
+          height: 600px;
+          margin: 0 auto;
+          background-color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="game-container">
+      <canvas id="game"></canvas>
+    </div>
+    <script src="js/kontra.js"></script>
+    <script src="js/platformer.js"></script>
+  </body>
+</html>
