@@ -34,8 +34,7 @@ let loop = kontra.gameLoop({
 
     // Pull player down if not jumping and in the air
     if (!player.grounded && !player.jumping) {
-      player.y += player.gravity;
-      player.dy = 0;
+      player.dy += 0.05;
     }
 
     // Pick up player movement
