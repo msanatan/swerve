@@ -19,6 +19,7 @@ let collideGround = () => {
       player.y = kontra.canvas.height - player.height;
       player.grounded = true;
       player.jumping = false;
+      player.dy = 0;
   }
 }
 
