@@ -23,7 +23,7 @@ let ball = kontra.sprite({
   x: kontra.canvas.width / 2,
   y: kontra.canvas.height / 2,
   color: 'red',
-  radius: 8,
+  radius: 12,
   dx: 4,
   dy: 4,
 });
@@ -42,15 +42,15 @@ ball.reset = () => {
   let randomX = Math.floor(Math.random() * 10) + 1;
   let randomY = Math.floor(Math.random() * 10) + 1;
   if (randomX > 5) {
-    ball.dx = 2;
+    ball.dx = 4;
   } else {
-    ball.dx = -2;
+    ball.dx = -4;
   }
 
   if (randomY > 5) {
-    ball.dy = 2;
+    ball.dy = 4;
   } else {
-    ball.dy = -2;
+    ball.dy = -4;
   }
 }
 
@@ -79,22 +79,22 @@ let loop = kontra.gameLoop({
 
     // Move sprite based on key presses
     if (kontra.keys.pressed('up') && player.y >= 0) {
-      player.y -= 4;
+      player.y -= 5;
     } else if (kontra.keys.pressed('down') && (player.y + player.height) <= kontra.canvas.height) {
-      player.y += 4;
+      player.y += 5;
     }
 
     // Move ball around
     if ((ball.y + ball.radius >= kontra.canvas.height) || (ball.y - ball.radius <= 0)) {
-      ball.dy *= -1;
+      ball.dy *= -1.1;
     }
 
     // Move opponent if ball is close by
-    if (ball.x < kontra.canvas.width / 3) {
+    if (ball.x < kontra.canvas.width / 2) {
       if (ball.y < opponent.y) {
-        opponent.y -= 4;
+        opponent.y -= 5;
       } else if (ball.y > opponent.y + opponent.height) {
-        opponent.y += 4;
+        opponent.y += 5;
       }
     }
   },
