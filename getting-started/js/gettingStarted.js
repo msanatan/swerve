@@ -2,11 +2,11 @@ kontra.init();
 
 let sprite = kontra.sprite({
   x: kontra.canvas.width / 2,
-  y: kontra.canvas.height / 2 - 15,
+  y: kontra.canvas.height / 2 - 40,
   color: 'red',
-  width: 15,
-  height: 30,
-  dx: 2
+  width: 30,
+  height: 80,
+  dx: 3
 });
 
 let loop = kontra.gameLoop({
