@@ -2,20 +2,20 @@
 kontra.init();
 
 let player = kontra.sprite({
-  x: kontra.canvas.width - 15 - 5,
+  x: kontra.canvas.width - 15 - 10,
   y: kontra.canvas.height / 2 - 15,
   color: 'white',
-  width: 10,
-  height: 25,
+  width: 20,
+  height: 80,
   score: 0,
 });
 
 let opponent = kontra.sprite({
-  x: 5,
+  x: 10,
   y: kontra.canvas.height / 2 - 15,
   color: 'white',
-  width: 10,
-  height: 25,
+  width: 20,
+  height: 80,
   score: 0,
 });
 
@@ -23,9 +23,9 @@ let ball = kontra.sprite({
   x: kontra.canvas.width / 2,
   y: kontra.canvas.height / 2,
   color: 'red',
-  radius: 4,
-  dx: 2,
-  dy: 2,
+  radius: 8,
+  dx: 4,
+  dy: 4,
 });
 
 // Custom rendering
@@ -79,9 +79,9 @@ let loop = kontra.gameLoop({
 
     // Move sprite based on key presses
     if (kontra.keys.pressed('up') && player.y >= 0) {
-      player.y -= 2;
+      player.y -= 4;
     } else if (kontra.keys.pressed('down') && (player.y + player.height) <= kontra.canvas.height) {
-      player.y += 2;
+      player.y += 4;
     }
 
     // Move ball around
@@ -92,9 +92,9 @@ let loop = kontra.gameLoop({
     // Move opponent if ball is close by
     if (ball.x < kontra.canvas.width / 3) {
       if (ball.y < opponent.y) {
-        opponent.y -= 2;
+        opponent.y -= 4;
       } else if (ball.y > opponent.y + opponent.height) {
-        opponent.y += 2;
+        opponent.y += 4;
       }
     }
   },
@@ -104,10 +104,10 @@ let loop = kontra.gameLoop({
     opponent.render();
     ball.render();
 
-    kontra.context.font = '20px Helvetica, Verdana, san-serif';
+    kontra.context.font = '40px Helvetica, Verdana, san-serif';
     kontra.context.fillStyle = '#efe343';
-    kontra.context.fillText(player.score, player.x - 10, kontra.canvas.height / 6);
-    kontra.context.fillText(opponent.score, opponent.x + 10, kontra.canvas.height / 6);
+    kontra.context.fillText(player.score, player.x - 40, kontra.canvas.height / 6);
+    kontra.context.fillText(opponent.score, opponent.x + 40, kontra.canvas.height / 6);
   }
 });
 
