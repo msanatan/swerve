@@ -3,10 +3,10 @@ kontra.init();
 
 let player = kontra.sprite({
   x: 5,
-  y: kontra.canvas.height - 30,
+  y: kontra.canvas.height - 60,
   color: 'red',
-  width: 10,
-  height: 6,
+  width: 30,
+  height: 18,
   gravity: 0.75,
   grounded: false,
   jumping: false,
@@ -29,7 +29,7 @@ let loop = kontra.gameLoop({
     collideGround();
 
     // Determine when to stop jumping if not colliding with anything
-    if (player.lastY - player.y >= 40) {
+    if (player.lastY - player.y >= 60) {
       player.jumping = false;
     }
 
@@ -40,7 +40,7 @@ let loop = kontra.gameLoop({
 
     // Pick up player movement
     if (kontra.keys.pressed('space') && player.grounded) {
-      player.dy = -player.gravity - 0.25;
+      player.dy = -player.gravity - 0.5;
       player.grounded = false;
       player.jumping = true;
       player.lastY = player.y;
