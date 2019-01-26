@@ -1,7 +1,14 @@
 'use strict';
 // Set dimensions of canvas element
-document.getElementById('game').width = window.innerWidth;
-document.getElementById('game').height = window.innerHeight;
+document.getElementById('game').width = window.innerWidth * window.devicePixelRatio;
+document.getElementById('game').height = window.innerHeight * window.devicePixelRatio;
+
+// Create scale ratio
+// Scaling idea taken from:
+// https://www.joshmorony.com/how-to-scale-a-game-for-all-device-sizes-in-phaser/
+const scaleRatio = window.devicePixelRatio / 3;
+const baseSpriteRadius = 60;
+const scaledSpriteRadius = baseSpriteRadius * scaleRatio;
 
 // Define globals
 let maxEnemies = 15;
@@ -11,28 +18,6 @@ let frameCount = 0;
 let gameOver = false;
 kontra.init();
 
-// Implement resize function. This function was taken from:
-// https://www.emanueleferonato.com/2018/02/16/how-to-scale-your-html5-games-if-your-framework-does-not-feature-a-scale-manager-or-if-you-do-not-use-any-framework/
-const resize = () => {
-  let canvas = document.getElementById('game');
-  let windowWidth = window.innerWidth;
-  let windowHeight = window.innerHeight;
-  let windowRatio = windowWidth / windowHeight;
-  let gameRatio = kontra.canvas.width / kontra.canvas.height;
-
-  if(windowRatio < gameRatio){
-    kontra.canvas.style.width = windowWidth + "px";
-    kontra.canvas.style.height = (windowWidth / gameRatio) + "px";
-  }
-  else{
-    kontra.canvas.style.width = (windowHeight * gameRatio) + "px";
-    kontra.canvas.style.height = windowHeight + "px";
-  }
-}
-
-// Resize the canvas before the game continues
-resize();
-
 // Set high score at the beginning:
 kontra.store.set('highScore', 0);
 
@@ -41,7 +26,7 @@ let player = kontra.sprite({
   x: kontra.canvas.width / 2,
   y: kontra.canvas.height / 2,
   color: 'yellow',
-  radius: 20,
+  radius: scaledSpriteRadius,
   score: 0,
   pointerDown: false,
   onDown() {
@@ -95,7 +80,7 @@ const createEnemy = () => {
   let enemy = kontra.sprite({
     x: startingX,
     y: startingY,
-    radius: 20,
+    radius: scaledSpriteRadius,
     dx: Math.floor(Math.random() * 4) - 2,
     dy: Math.floor(Math.random() * 6) + 3,
     color: 'red',
