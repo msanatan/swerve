@@ -4,7 +4,7 @@ document.getElementById('game').width = 800;
 document.getElementById('game').height = 640;
 
 // Define globals
-let maxEnemies = 30;
+let maxEnemies = 20;
 // As we add enemies every second up till the max, we use this variable to help
 // track when a second is passed
 let frameCount = 0;
@@ -75,7 +75,7 @@ const createEnemy = () => {
     y: startingY,
     radius: 20,
     dx: Math.floor(Math.random() * 4) - 2,
-    dy: Math.floor(Math.random() * 4) + 2,
+    dy: Math.floor(Math.random() * 6) + 3,
     color: 'red',
 
     update() {
@@ -141,9 +141,9 @@ let loop = kontra.gameLoop({
     // Remove dead enemies
     enemies = enemies.filter(enemy => enemy.isAlive());
 
-    // Every 1/12 of a second, check if we've reached the limits of enemies and add if
+    // Every 1/6 of a second, check if we've reached the limits of enemies and add if
     // we still can
-    if (frameCount % 5 == 0) {
+    if (frameCount % 10 == 0) {
       if (enemies.length < maxEnemies) {
         createEnemy();
       }
@@ -155,7 +155,7 @@ let loop = kontra.gameLoop({
     }
 
     // To ramp up difficulty, every 20 seconds increase the max number of enemies
-    if (player.score % 20 == 0) {
+    if (player.score % 60 == 0) {
       maxEnemies += 2;
     }
 
