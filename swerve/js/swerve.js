@@ -1,14 +1,35 @@
 'use strict';
-// Set dimensions of canvas element
-document.getElementById('game').width = window.innerWidth * window.devicePixelRatio;
-document.getElementById('game').height = window.innerHeight * window.devicePixelRatio;
+// Set dimensions of canvas
+document.getElementById('game').width = window.innerWidth;
+document.getElementById('game').height = window.innerHeight;
+// Set resolution of canvas
+document.getElementById('game').style.width = window.innerWidth + 'px';
+document.getElementById('game').style.height = window.innerHeight + 'px';
 
-// Create scale ratio
+// Definie resolution game is defined for
 // Scaling idea taken from:
-// https://www.joshmorony.com/how-to-scale-a-game-for-all-device-sizes-in-phaser/
-const scaleRatio = window.devicePixelRatio / 3;
-const baseSpriteRadius = 60;
+// https://stackoverflow.com/questions/33515707/scaling-a-javascript-canvas-game-properly
+const nativeWidth = 800;
+const nativeHeight = 640;
+const scaleRatio = Math.min(window.innerWidth / nativeWidth, window.innerHeight / nativeHeight);;
+const baseSpriteRadius = 30;
 const scaledSpriteRadius = baseSpriteRadius * scaleRatio;
+
+// Defining text sizes, with scaling we can't use absolute positiong and sizes
+const scoreTextOffset = {
+  x: 120 * scaleRatio,
+  y: 40 * scaleRatio
+};
+
+const textFontSizes = {
+  small: 30 * scaleRatio,
+  large: 80 * scaleRatio
+}
+
+const gameOverTextOffset = {
+  highscore: 60 * scaleRatio,
+  instructions: 100 * scaleRatio
+};
 
 // Define globals
 let maxEnemies = 15;
@@ -81,8 +102,9 @@ const createEnemy = () => {
     x: startingX,
     y: startingY,
     radius: scaledSpriteRadius,
-    dx: Math.floor(Math.random() * 4) - 2,
-    dy: Math.floor(Math.random() * 6) + 3,
+    // Movement should be scaled as well
+    dx: Math.floor(Math.floor(Math.random() * 4) - 2 * scaleRatio),
+    dy: Math.floor(Math.floor(Math.random() * 6) + 3 * scaleRatio),
     color: 'red',
 
     update() {
@@ -175,21 +197,21 @@ const loop = kontra.gameLoop({
     enemies.forEach(enemy => enemy.render());
 
     // Render score
-    kontra.context.font = '20px Helvetica, Verdana, san-serif';
+    kontra.context.font = `${textFontSizes.small}px Helvetica, Verdana, san-serif`;
     kontra.context.fillStyle = 'white';
     let score = `Score: ${player.score}`
-    kontra.context.fillText(score, kontra.canvas.width - 140, 40);
+    kontra.context.fillText(score, kontra.canvas.width - scoreTextOffset.x, scoreTextOffset.y);
 
     // If the game is over, ensure this text is displayed at the top of the screen
     if (gameOver) {
-      kontra.context.font = '60px Helvetica, Verdana, san-serif';
+      kontra.context.font = `${textFontSizes.large}px Helvetica, Verdana, san-serif`;
       kontra.context.textBaseline = 'middle';
       kontra.context.textAlign = 'center';
       kontra.context.fillText('Game Over', kontra.canvas.width / 2, kontra.canvas.height / 2);
-      kontra.context.font = '20px Helvetica, Verdana, san-serif';
+      kontra.context.font = `${textFontSizes.small}px Helvetica, Verdana, san-serif`;
       let highScore = `Highest Score: ${kontra.store.get('highScore')}`;
-      kontra.context.fillText(highScore, kontra.canvas.width / 2, (kontra.canvas.height / 2) + 40);
-      kontra.context.fillText('Press to try again', kontra.canvas.width / 2, (kontra.canvas.height / 2) + 70);
+      kontra.context.fillText(highScore, kontra.canvas.width / 2, (kontra.canvas.height / 2) + gameOverTextOffset.highscore);
+      kontra.context.fillText('Press to try again', kontra.canvas.width / 2, (kontra.canvas.height / 2) + gameOverTextOffset.instructions);
     }
   }
 });
