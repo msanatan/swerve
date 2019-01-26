@@ -1,15 +1,37 @@
 'use strict';
 // Set dimensions of canvas element
-document.getElementById('game').width = 800;
-document.getElementById('game').height = 640;
+document.getElementById('game').width = window.innerWidth;
+document.getElementById('game').height = window.innerHeight;
 
 // Define globals
-let maxEnemies = 20;
+let maxEnemies = 15;
 // As we add enemies every second up till the max, we use this variable to help
 // track when a second is passed
 let frameCount = 0;
 let gameOver = false;
 kontra.init();
+
+// Implement resize function. This function was taken from:
+// https://www.emanueleferonato.com/2018/02/16/how-to-scale-your-html5-games-if-your-framework-does-not-feature-a-scale-manager-or-if-you-do-not-use-any-framework/
+const resize = () => {
+  let canvas = document.getElementById('game');
+  let windowWidth = window.innerWidth;
+  let windowHeight = window.innerHeight;
+  let windowRatio = windowWidth / windowHeight;
+  let gameRatio = kontra.canvas.width / kontra.canvas.height;
+
+  if(windowRatio < gameRatio){
+    kontra.canvas.style.width = windowWidth + "px";
+    kontra.canvas.style.height = (windowWidth / gameRatio) + "px";
+  }
+  else{
+    kontra.canvas.style.width = (windowHeight * gameRatio) + "px";
+    kontra.canvas.style.height = windowHeight + "px";
+  }
+}
+
+// Resize the canvas before the game continues
+resize();
 
 // Set high score at the beginning:
 kontra.store.set('highScore', 0);
@@ -101,7 +123,7 @@ const createEnemy = () => {
 }
 
 // Reset game state for when game is over
-let reset = () => {
+const reset = () => {
   // Reset enemy state
   enemies = [];
   maxEnemies = 30;
@@ -116,7 +138,7 @@ let reset = () => {
   gameOver = false;
 }
 
-let checkReset = () => {
+const checkReset = () => {
   if (gameOver) {
     reset();
   }
@@ -128,7 +150,7 @@ kontra.canvas.addEventListener("mousedown", checkReset, false);
 kontra.canvas.addEventListener("touchstart", checkReset, false);
 
 // Main game loop
-let loop = kontra.gameLoop({
+const loop = kontra.gameLoop({
   update: () => {
     // Check if game is over and skip logic
     if (gameOver) {
@@ -141,9 +163,9 @@ let loop = kontra.gameLoop({
     // Remove dead enemies
     enemies = enemies.filter(enemy => enemy.isAlive());
 
-    // Every 1/6 of a second, check if we've reached the limits of enemies and add if
+    // Every 1/3 of a second, check if we've reached the limits of enemies and add if
     // we still can
-    if (frameCount % 10 == 0) {
+    if (frameCount % 20 == 0) {
       if (enemies.length < maxEnemies) {
         createEnemy();
       }
