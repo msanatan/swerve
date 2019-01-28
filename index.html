@@ -3,21 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>Getting Started</title>
+    <link rel="manifest" href="manifest.json">
+    <title>Swerve</title>
     <style>
       html, body {
+        width: 100%;
+        height: 100%;
         margin: 0;
         padding: 0;
+      }
+
+      .game-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+      }
+
+      #game {
+        background-color: black;
+        margin: 0 auto;
       }
     </style>
   </head>
 
   <body>
-    <ul>
-        <li><a href="getting-started/">Getting Started</a></li>
-        <li><a href="pong/">Pong</a></li>
-        <li><a href="jump/">Jump</a></li>
-        <li><a href="swerve/">Swerve</a></li>
-    </ul>
+    <div class="game-container">
+      <canvas id="game"></canvas>
+    </div>
+    <script src="js/kontra.js"></script>
+    <script src="js/swerve.js"></script>
   </body>
 </html>
