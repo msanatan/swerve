@@ -84,15 +84,14 @@ let player = kontra.sprite({
       }
     })
   },
+  render() {
+    kontra.context.fillStyle = this.color;
+    kontra.context.beginPath();
+    kontra.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+    kontra.context.fill();
+  }
 });
 
-// render player like a ball
-player.render = () => {
-  kontra.context.fillStyle = player.color;
-  kontra.context.beginPath();
-  kontra.context.arc(player.x, player.y, player.radius, 0, 2 * Math.PI, false);
-  kontra.context.fill();
-}
 // Track player with pointer
 kontra.pointer.track(player);
 
@@ -241,22 +240,19 @@ let playButton = kontra.sprite({
       return
     }
   },
+  render() {
+    kontra.context.fillStyle = this.color;
+    kontra.context.beginPath();
+    kontra.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+    kontra.context.fill();
+
+    kontra.context.fillStyle = 'white';
+    kontra.context.font = `${this.textFontSize}px Verdana, Geneva, sans-serif`;
+    kontra.context.textBaseline = 'middle';
+    kontra.context.textAlign = 'center';
+    kontra.context.fillText('Play', this.x, this.y);
+  }
 });
-
-// render player like a ball
-playButton.render = () => {
-  kontra.context.fillStyle = playButton.color;
-  kontra.context.beginPath();
-  kontra.context.arc(playButton.x, playButton.y, playButton.radius, 0, 2 * Math.PI, false);
-  kontra.context.fill();
-
-  kontra.context.fillStyle = 'white';
-  kontra.context.font = `${playButton.textFontSize}px Verdana, Geneva, sans-serif`;
-  kontra.context.textBaseline = 'middle';
-  kontra.context.textAlign = 'center';
-  kontra.context.fillText('Play', playButton.x, playButton.y);
-
-}
 
 // Track player with pointer
 kontra.pointer.track(playButton);
