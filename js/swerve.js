@@ -23,7 +23,8 @@ const scoreTextOffset = {
 
 const textFontSizes = {
   small: 30 * scaleRatio,
-  large: 80 * scaleRatio
+  large: 80 * scaleRatio,
+  title: 120 * scaleRatio
 }
 
 const gameOverTextOffset = {
@@ -39,10 +40,13 @@ let frameCount = 0;
 let gameOver = false;
 kontra.init();
 
+// Remove image smoothening
+kontra.context.imageSmoothingEnabled = false
+
 // Set high score at the beginning:
 kontra.store.set('highScore', 0);
 
-// Define players
+// Define player
 let player = kontra.sprite({
   x: kontra.canvas.width / 2,
   y: kontra.canvas.height / 2,
@@ -81,6 +85,7 @@ let player = kontra.sprite({
     })
   },
 });
+
 // render player like a ball
 player.render = () => {
   kontra.context.fillStyle = player.color;
@@ -104,7 +109,7 @@ const createEnemy = () => {
     radius: scaledSpriteRadius,
     // Movement should be scaled as well
     dx: Math.floor(Math.floor(Math.random() * 4) - 2 * scaleRatio),
-    dy: Math.floor(Math.floor(Math.random() * 6) + 3 * scaleRatio),
+    dy: Math.floor(Math.floor(Math.random() * 7) + 4 * scaleRatio),
     color: 'red',
 
     update() {
@@ -157,12 +162,13 @@ kontra.canvas.addEventListener("mousedown", checkReset, false);
 kontra.canvas.addEventListener("touchstart", checkReset, false);
 
 // Main game loop
-const loop = kontra.gameLoop({
+const gameLoop = kontra.gameLoop({
   update: () => {
     // Check if game is over and skip logic
     if (gameOver) {
       return
     }
+
     // We update by one every update as kontra guarantees 60 FPS.
     // So after 60 we get a second
     player.update(enemies);
@@ -170,9 +176,9 @@ const loop = kontra.gameLoop({
     // Remove dead enemies
     enemies = enemies.filter(enemy => enemy.isAlive());
 
-    // Every 1/3 of a second, check if we've reached the limits of enemies and add if
+    // Every 1/4 of a second, check if we've reached the limits of enemies and add if
     // we still can
-    if (frameCount % 20 == 0) {
+    if (frameCount % 15 == 0) {
       if (enemies.length < maxEnemies) {
         createEnemy();
       }
@@ -183,7 +189,7 @@ const loop = kontra.gameLoop({
       player.score += 1;
     }
 
-    // To ramp up difficulty, every 20 seconds increase the max number of enemies
+    // To ramp up difficulty, every minute increase the max number of enemies
     if (player.score % 60 == 0) {
       maxEnemies += 2;
     }
@@ -216,4 +222,59 @@ const loop = kontra.gameLoop({
   }
 });
 
-loop.start();
+// Create a sprite to manage button clicks to start game
+let playButton = kontra.sprite({
+  x: kontra.canvas.width / 2,
+  y: kontra.canvas.height / 2 + (100 * scaleRatio),
+  color: 'red',
+  radius: 100 * scaleRatio,
+  textFontSize: 80 * scaleRatio,
+  pointerUp: false,
+  onUp() {
+    this.pointerUp = true;
+  },
+  update() {
+    // Update position to track pointer movements
+    if (this.pointerUp) {
+      menuLoop.stop();
+      gameLoop.start();
+      return
+    }
+  },
+});
+
+// render player like a ball
+playButton.render = () => {
+  kontra.context.fillStyle = playButton.color;
+  kontra.context.beginPath();
+  kontra.context.arc(playButton.x, playButton.y, playButton.radius, 0, 2 * Math.PI, false);
+  kontra.context.fill();
+
+  kontra.context.fillStyle = 'white';
+  kontra.context.font = `${playButton.textFontSize}px Verdana, Geneva, sans-serif`;
+  kontra.context.textBaseline = 'middle';
+  kontra.context.textAlign = 'center';
+  kontra.context.fillText('Play', playButton.x, playButton.y);
+
+}
+
+// Track player with pointer
+kontra.pointer.track(playButton);
+
+const menuLoop = kontra.gameLoop({
+  update: () => {
+    playButton.update();
+  },
+  render: () => {
+    kontra.context.fillStyle = 'white';
+    kontra.context.font = `${textFontSizes.title}px "Comic Sans MS", cursive, sans-serif`;
+    kontra.context.textBaseline = 'middle';
+    kontra.context.textAlign = 'center';
+    kontra.context.fillText('Swerve', kontra.canvas.width / 2, 150 * scaleRatio);
+
+    playButton.render();
+  }
+});
+
+// gameLoop.start();
+menuLoop.start();
