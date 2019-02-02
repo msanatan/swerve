@@ -232,6 +232,12 @@ let playButton = kontra.sprite({
   onUp() {
     this.pointerUp = true;
   },
+  collidesWithPointer(pointer) {
+    // perform a circle v circle collision test
+    let dx = pointer.x - this.x;
+    let dy = pointer.y - this.y;
+    return Math.sqrt(dx * dx + dy * dy) < this.radius * 2;
+  },
   update() {
     // Update position to track pointer movements
     if (this.pointerUp) {
